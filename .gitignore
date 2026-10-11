@@ -1,0 +1,56 @@
+# Build products; source PNG/ICO assets remain versioned.
+bin/
+obj/
+build/
+dist/
+*.exe
+*.dll
+*.pdb
+*.cache
+
+# Local runtime data and reports.
+logs/
+diagnostics/
+*.log
+*.jsonl
+preferences-*.txt
+diagnostics-*.txt
+ui-check-*.txt
+watcher-*.json
+incident-*
+*incident-report*
+verification-*
+*-verification-*
+startup-before-*
+startup-backup-*
+*startup-backup*
+
+# Unrelated detector backups and previous-version archives.
+astra-detector-backup-*.js
+*-backup-*.js
+*.zip
+*.bak
+*.old
+
+# Secrets and machine-local configuration.
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.pfx
+*.p12
+credentials*
+secrets*
+*.user
+*.suo
+.vs/
+.vscode/
+
+# OS and editor artifacts.
+Thumbs.db
+Desktop.ini
+.DS_Store
+*~
+*.swp
+*.tmp

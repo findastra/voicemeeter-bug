@@ -1,0 +1,89 @@
+VOICEMEETER BUG
+Desktop audio helper by Astra - version 1.0
+
+USE IT
+Click the round grey, red and black Bug to restart Voicemeeter's audio engine.
+Bug is the same standard size as the other desktop pets, with no visible neck.
+The yellow star is puffy and decorated with sparkles.
+Audio briefly pauses during a restart. Your mixer routing, gains and mute choices
+are not intentionally changed.
+
+Ctrl+Alt+F10 does the same repair, even when Bug is hidden.
+Drag the Bug or yellow star to move them. Click the star to hide/show Bug.
+Right-click either for automatic repair, start with Windows, status/help, or Quit.
+The tray icon and desktop shortcut can bring Bug back if you lose him.
+The standalone star controls this Bug. With Astra's desktop pets, their star shows
+every pet roaming free across the screen at once, Bug included, and hides them all
+again. Double-click the Farmer for his desk. Double-click any pet to open its app;
+Bug opens status/help, and a single click on Bug still repairs audio.
+The desktop pets launch Bug in hosted mode: his audio watcher and hotkey remain
+active, while the duplicate standalone Bug and star windows are hidden.
+
+AUTOMATIC REPAIR
+Bug watches the Windows device connection state of Voicemeeter's selected
+hardware outputs. After a disconnected output returns and settles for two
+seconds, it requests one audio-engine restart through the installed Remote API.
+By default, Bug leaves A1 recovery to Voicemeeter and watches the other selected
+outputs. This assumes Voicemeeter's native A1 auto-restart is enabled; Bug does
+not read or change that native setting. Its menu can include A1 when needed.
+
+There is a 30-second automatic cooldown and at most three automatic attempts
+per ten minutes. Events during cooldown are retained. Manual clicks have a
+five-second cooldown. Automatic repair can be turned off in the menu.
+
+LIMITS
+Bug cannot hear the sound reaching your headphones. A cable or driver can
+sound robotic while Windows still reports the device as connected and healthy.
+Such glitches need a click. Silence and a zero sample-rate reading do not
+trigger repairs on their own. No microphone or call audio is recorded.
+An accepted restart command is not proof that the sound is fixed.
+
+LOCAL FILES
+Executable: voicemeeter-bug-20261008.exe
+Rebuild: run build-voicemeeter-bug-20261008.ps1 with Windows PowerShell.
+Requires Windows and an installed matching-architecture Voicemeeter Remote API.
+Uses Windows .NET Framework, Windows Forms and built-in Windows audio APIs.
+No package download or new third-party service is required.
+
+Preferences and date-named watcher logs live in:
+%LOCALAPPDATA%\findastra\voicemeeter-bug
+watcher-YYYYMMDD.jsonl contains a heartbeat every five seconds and snapshots
+before and after each manual repair. Records include device names, states,
+sample rates, last device event, cooldown/suppression reasons and errors, not
+audio. The watcher log set is capped at four files of 2 MiB each across dates.
+Legacy recovery logs and separately requested reports are outside this cap.
+
+Start with Windows uses the current user's Run entry named
+findastra-voicemeeter-bug. Turn that menu option off to remove it.
+Quit Bug to stop the app. This does not close Voicemeeter or Farmer.
+
+Developer checks:
+--self-test runs fake-API recovery and log-storage checks without touching live
+audio. Results are written to bin\self-test-results-YYYYMMDD.json beside the app.
+--diagnose writes a read-only device report in the local data folder. Its probe
+disables automatic repair only in that probe; it does not change the running Bug.
+--check asks the running Bug to write its current visibility and detector status.
+--status opens Bug's status/help window, starting the helper if needed.
+--preview renders a static art preview in the app folder.
+--test-ui exposes the pet windows in the taskbar for UI verification.
+--test-gestures disables manual repair actions for gesture-only testing.
+--quit asks the running Bug to exit cleanly.
+--hosted starts or hands Bug to the desktop pets (watcher stays active).
+--repair asks the running watcher for one manual repair, with its normal cooldown.
+The command is also supported when the helper is not already running.
+Launching the executable again reveals the existing Bug; it does not start
+another watcher or restart audio.
+
+Art source: original Bug sheet generated with the built-in image-generation tool,
+2026-10-08; shared pet mood frames are embedded in the executable.
+New visual and desktop pets integration: OpenAI Codex (GPT-6), 2026-10-08.
+Free-roaming desktop pets (hosted mode replaces the earlier mode): Claude Opus 5.5, 2026-10-09.
+The audio recovery algorithm is unchanged by this visual update.
+Watcher diagnostics and local repository preparation: OpenAI Codex (GPT-6),
+2026-10-11. Repair triggers and cooldown behavior are unchanged.
+
+OFFICIAL REFERENCES
+https://download.vb-audio.com/Download_CABLE/VoicemeeterRemoteAPI.pdf
+https://github.com/vburel2018/Voicemeeter-SDK/blob/main/VoicemeeterRemote.h
+https://voicemeeter.com/quick-tips-restart-the-audio-engine/
+https://learn.microsoft.com/en-us/windows/win32/coreaudio/device-events

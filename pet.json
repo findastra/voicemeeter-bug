@@ -1,0 +1,44 @@
+{
+  "pet": "Voicemeeter Bug",
+  "kind": "pet-app",
+  "owner": "Astra",
+  "sprite": "bug-idle-20261008.png",
+  "art_key": "voicemeeter-bug",
+  "job": "Requests a supported Voicemeeter audio-engine restart on a manual click or an observed reconnect of a selected hardware output.",
+  "runs_on": "64-bit Windows with .NET Framework and an installed compatible Voicemeeter Remote API.",
+  "entry": "build-voicemeeter-bug-20261008.ps1",
+  "status": "growing",
+  "cage": {
+    "topic": "pet-app",
+    "home": "README.md",
+    "submit": {
+      "date": "2026-10-11",
+      "job": "Requests a supported Voicemeeter audio-engine restart on a manual click or an observed reconnect of a selected hardware output.",
+      "status": "growing",
+      "audit": {
+        "cadence": "weekly",
+        "subject": "the app's build, fake-API recovery checks, and selected output reconnect monitoring",
+        "needs": "a compatible installed Voicemeeter Remote API; a listening check when audible distortion persists"
+      }
+    }
+  },
+  "built_with": "OpenAI Codex (GPT-6), 2026-10-08; local repository preparation and diagnostics work with OpenAI Codex (GPT-6), 2026-10-11",
+  "audit": {
+    "cadence": "weekly",
+    "subject": "the app's build, fake-API recovery checks, and selected output reconnect monitoring",
+    "needs": "a compatible installed Voicemeeter Remote API; a listening check when audible distortion persists",
+    "local_verification": {
+      "prepared_on": "2026-10-11",
+      "timezone": "America/Denver",
+      "source_scan": "passed: no detected keys, personal paths or private usernames in publication files; runtime logs, binaries and backups excluded",
+      "build": "passed: x64 .NET Framework candidate built and installed locally on 2026-10-11",
+      "self_test": "passed: 71 fake-API recovery assertions and 52 telemetry storage assertions; live_audio_used=false",
+      "physical_cord_test": "not_run",
+      "heard_audio_quality": "not_verified",
+      "publication": "not_done: no GitHub repository created and no push",
+      "hosted_runtime": "verified: one hosted helper, hidden standalone windows, registered hotkey, heartbeat writing at approximately five-second intervals; desktop host stayed running",
+      "live_audio_restart": "not_requested_during_validation",
+      "reviewed_by": "OpenAI Codex (GPT-6), 2026-10-11"
+    }
+  }
+}
