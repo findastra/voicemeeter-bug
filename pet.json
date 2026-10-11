@@ -32,13 +32,15 @@
       "timezone": "America/Denver",
       "source_scan": "passed: no detected keys, personal paths or private usernames in publication files; runtime logs, binaries and backups excluded",
       "build": "passed: x64 .NET Framework candidate built and installed locally on 2026-10-11",
-      "self_test": "passed: 71 fake-API recovery assertions and 52 telemetry storage assertions; live_audio_used=false",
+      "self_test": "passed: 86 fake-API recovery assertions and 52 telemetry storage assertions; live_audio_used=false",
       "physical_cord_test": "not_run",
       "heard_audio_quality": "not_verified",
-      "publication": "not_done: no GitHub repository created and no push",
-      "hosted_runtime": "verified: one hosted helper, hidden standalone windows, registered hotkey, heartbeat writing at approximately five-second intervals; desktop host stayed running",
-      "live_audio_restart": "not_requested_during_validation",
-      "reviewed_by": "OpenAI Codex (GPT-6), 2026-10-11"
+      "publication": "private repository https://github.com/findastra/voicemeeter-bug; initial commit published to origin/master on 2026-10-11",
+      "hosted_runtime": "verified: one updated hosted helper, hidden standalone windows, registered Ctrl+Alt+F10 hotkey, automatic monitoring enabled, corrected --hosted login entry recognized, fresh heartbeat logs",
+      "live_audio_restart": "verified command acceptance on 2026-10-11 at 02:44:49 America/Denver: one manual Command.Restart request returned 0; later API/device polls succeeded; audible result not verified",
+      "reviewed_by": "OpenAI Codex (GPT-6), 2026-10-11",
+      "watchdog_update": "passed: stale recovery events cleared on automatic-mode/A1 ownership changes, fresh baseline required, existing cooldown history preserved; legacy --caged accepted as hosted alias",
+      "login_test": "configured and startup command verified; actual logout/reboot not performed"
     }
   }
 }

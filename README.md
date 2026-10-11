@@ -43,7 +43,9 @@ If Bug is already running, hosted mode sends the existing instance a command to 
 
 The watcher matches Voicemeeter's selected hardware outputs to Windows render endpoints. An observed disconnect followed by a stable reconnect can trigger a restart after a two-second settling period. It uses a 30-second automatic cooldown and permits at most three automatic attempts in ten minutes. Events arriving during cooldown remain pending. Manual requests have a five-second cooldown.
 
-The **Also watch A1** setting is intended for a setup where Voicemeeter's own native A1 restart has been disabled. With the native-A1 setting enabled in Bug, Bug leaves A1 recovery to Voicemeeter. The menu setting describes this helper's behavior; it does not configure Voicemeeter's native option.
+Changing automatic recovery or A1 ownership clears pending repairs and collects a fresh three-second baseline. Turning automatic recovery back on does not replay device events from when it was disabled. Existing cooldown and attempt limits remain in effect.
+
+The **Also watch A1** setting is intended for a setup where Voicemeeter's own native A1 restart has been disabled. With the native-A1 setting enabled in Bug, Bug excludes A1 from its own recovery, assuming Voicemeeter will handle it. This helper does not read or verify Voicemeeter's native option; the menu setting does not configure it. Do not enable two independent recovery controllers for the same output.
 
 Recovery uses Voicemeeter's installed Remote API. It does not intentionally change routing, gain, or mute choices, and it does not force-kill Voicemeeter.
 
@@ -84,6 +86,7 @@ Local verification results are recorded in [pet.json](pet.json). A pending resul
 
 - The watcher cannot detect distortion that produces no observable device reconnect. Silence and a zero sample-rate reading do not independently trigger repair.
 - Fake-API tests do not validate physical cable behavior, driver recovery, or what a person hears after a restart.
+- Cooldown deadlines currently use UTC wall time. An unusual backward system-clock correction can extend a cooldown; the Voicemeeter menu remains a manual fallback.
 - API acceptance confirms only that a command was accepted. Physical audio recovery needs a listening check.
 - Nine mood frames are embedded, but the native renderer currently uses idle, blink, and happy. The complete shared nine-mood lifecycle is not implemented.
 - Hosted integration depends on the separately installed desktop-pets host. This repository does not install, repair, or publish that host.

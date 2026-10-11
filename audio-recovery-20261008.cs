@@ -30,8 +30,27 @@ namespace VoicemeeterBug
         private string lastAction = "No repair requested", detectorHealth = "Starting", remoteError = "", monitorError = "";
         private bool baseline, disposed, circuitNotified, injected;
         private int droppedEvents;
-        public bool Automatic { get; set; }
-        public bool NativeA1AutoRestart { get; set; }
+        private bool automatic = true, nativeA1AutoRestart = true;
+        public bool Automatic
+        {
+            get { return automatic; }
+            set
+            {
+                if (automatic == value) return;
+                automatic = value;
+                ResetDetectorBaseline("Automatic recovery " + (value ? "enabled" : "disabled"));
+            }
+        }
+        public bool NativeA1AutoRestart
+        {
+            get { return nativeA1AutoRestart; }
+            set
+            {
+                if (nativeA1AutoRestart == value) return;
+                nativeA1AutoRestart = value;
+                ResetDetectorBaseline(value ? "A1 excluded from Bug recovery; native setting is not verified" : "Bug recovery now includes A1");
+            }
+        }
         public string Status { get; private set; }
         public string Details { get; private set; }
         public bool Connected { get; private set; }
@@ -40,13 +59,21 @@ namespace VoicemeeterBug
         public RecoveryEngine(Action<string> logger)
         {
             log = logger ?? delegate { }; clock = delegate { return DateTime.UtcNow; };
-            Automatic = true; NativeA1AutoRestart = true;
             Status = "Starting"; Details = "Connecting to Voicemeeter";
         }
 
         internal RecoveryEngine(IVoiceRemote voice, IEndpointMonitor devices, Func<DateTime> time, Action<string> logger)
             : this(logger)
         { remote = voice; monitor = devices; clock = time; injected = true; }
+
+        private void ResetDetectorBaseline(string reason)
+        {
+            // A policy change must not replay work collected under the previous policy.
+            // The next scan consumes queued callbacks without treating them as new faults.
+            pending.Clear(); baseline = false; baselineUntil = clock().AddSeconds(3);
+            nextScan = DateTime.MinValue;
+            Write(reason + "; collecting a fresh endpoint baseline without restarting.");
+        }
 
         public string[] SelectedOutputs
         {
@@ -171,7 +198,7 @@ namespace VoicemeeterBug
             List<Endpoint> previousMapping = new List<Endpoint>(known.Values);
             Dictionary<string, uint> transitions = new Dictionary<string, uint>(StringComparer.OrdinalIgnoreCase);
             foreach (Endpoint ep in known.Values) transitions[ep.Id] = ep.State;
-            bool allow = baseline && now >= ignoreUntil && !force;
+            bool allow = Automatic && baseline && now >= ignoreUntil && !force;
             foreach (EndpointEvent ev in events)
             {
                 Endpoint ep;
@@ -210,7 +237,7 @@ namespace VoicemeeterBug
         {
             Endpoint primary = outputs.Length > 0 && outputs[0].Bus == 0 ? MatchOutput(outputs[0].Name, mapping) : null;
             if (NativeA1AutoRestart && primary != null && String.Equals(primary.Id, id, StringComparison.OrdinalIgnoreCase))
-            { Write("A1 device transition observed; Voicemeeter's native A1 auto-restart owns recovery."); return; }
+            { Write("A1 device transition observed; A1 is excluded from Bug recovery. Voicemeeter's native auto-restart setting is not verified."); return; }
             foreach (OutputReading output in outputs)
             {
                 Endpoint match = MatchOutput(output.Name, mapping);
@@ -324,7 +351,7 @@ namespace VoicemeeterBug
                 if (output.SampleRate <= 0) zero.Add("A" + (output.Bus + 1));
             }
             Details = Automatic ? "Watching " + mapped + " selected output(s)." : "Automatic repair is off. Click me if sound breaks.";
-            if (NativeA1AutoRestart) Details += " Voicemeeter handles A1 automatically.";
+            if (NativeA1AutoRestart) Details += " A1 is excluded; Voicemeeter's native auto-restart setting is not verified.";
             if (uncertain > 0) Details += " " + uncertain + " output(s) cannot be matched uniquely.";
             if (zero.Count > 0) Details += " No reported sample rate on " + String.Join(", ", zero.ToArray()) + "; this alone does not trigger a restart.";
         }
@@ -338,7 +365,7 @@ namespace VoicemeeterBug
             sb.AppendLine("snapshot_utc=" + Utc(now) + "; source=cached_detector_state");
             sb.AppendLine("last_tick_completed_utc=" + Utc(lastTickCompleted) + "; tick_age_seconds=" + Age(now, lastTickCompleted) + "; last_tick_outcome=" + lastTickOutcome);
             sb.AppendLine("last_successful_remote_poll_utc=" + Utc(lastRemotePoll) + "; last_successful_endpoint_scan_utc=" + Utc(lastEndpointScan));
-            sb.AppendLine("Connected: " + Connected + "; automatic: " + Automatic + "; native A1 auto-restart: " + NativeA1AutoRestart);
+            sb.AppendLine("Connected: " + Connected + "; automatic: " + Automatic + "; A1 excluded from Bug recovery: " + NativeA1AutoRestart + "; native setting not verified");
             sb.AppendLine("Status: " + Status); sb.AppendLine(Details);
             sb.AppendLine("Detector: " + detectorHealth);
             sb.AppendLine("Baseline ready: " + baseline + "; pending outputs: " + pending.Count + "; dropped endpoint events: " + droppedEvents);
@@ -420,7 +447,7 @@ namespace VoicemeeterBug
                 string disposition = current == null ? "endpoint not uniquely matched" : current.State != 1 ? "waiting for active endpoint" : now < item.LastChange.AddSeconds(2) ? "two-second debounce" : "device ready; subject to automatic gates and guard";
                 sb.AppendLine("pending=A" + (item.Bus + 1) + "; name=" + item.Name + "; event_endpoint_id=" + item.Id + "; last_change_utc=" + Utc(item.LastChange) + "; reason=" + disposition);
             }
-            sb.AppendLine("native_a1_ownership=" + (NativeA1AutoRestart ? "A1 excluded; relies on configured native auto-restart, not read back from Voicemeeter" : "Bug watches A1"));
+            sb.AppendLine("native_a1_ownership=" + (NativeA1AutoRestart ? "A1 excluded; native auto-restart is assumed, not verified in Voicemeeter" : "Bug watches A1; native setting not verified"));
             sb.AppendLine("alive semantics: a completed tick is not proof of healthy audio; gaps can mean a stopped or stalled loop or missing logging.");
         }
 

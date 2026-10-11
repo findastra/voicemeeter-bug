@@ -32,7 +32,7 @@ namespace VoicemeeterBug {
             Directory.CreateDirectory(Data);
             TestUi=Array.IndexOf(args,"--test-ui")>=0;
             TestGestures=Array.IndexOf(args,"--test-gestures")>=0;
-            InitialHosted=Array.IndexOf(args,"--hosted")>=0;
+            InitialHosted=Array.IndexOf(args,"--hosted")>=0 || Array.IndexOf(args,"--caged")>=0;
             InitialRepair=Array.IndexOf(args,"--repair")>=0;
             InitialStatus=Array.IndexOf(args,"--status")>=0;
             SetProcessDPIAware();
@@ -231,7 +231,7 @@ namespace VoicemeeterBug {
             detailsWindow=new Form {Text="Voicemeeter Bug - status and help",ClientSize=new Size(650,520),StartPosition=FormStartPosition.CenterScreen,TopMost=true,BackColor=Color.FromArgb(28,33,39)};
             var info=new TextBox {Multiline=true,ReadOnly=true,ScrollBars=ScrollBars.Vertical,Dock=DockStyle.Fill,BorderStyle=BorderStyle.None,BackColor=detailsWindow.BackColor,ForeColor=Color.FromArgb(236,234,243),Font=new Font("Segoe UI",10),Margin=new Padding(18)};
             var refresh=new Button {Text="Refresh status",Dock=DockStyle.Bottom,Height=36};
-            Action refreshText=delegate {info.Text="VOICEMEETER BUG  /  1.0\r\nBy Astra\r\n\r\nClick Bug: restart the audio engine.\r\nCtrl+Alt+F10: same action.\r\nDrag Bug or star to move. Click star to hide/show Bug.\r\nRight-click either, or use the tray icon, for controls.\r\n\r\nAutomatic repair watches selected output device reconnects.\r\n"+(engine.NativeA1AutoRestart?"A1 is handled by Voicemeeter's native auto-restart.":"The Bug is also watching A1.")+"\r\nNo microphone recording. Silence does not cause a reset.\r\nIf the cord glitches without a Windows device event, click Bug.\r\nA successful command does not confirm what you hear.\r\n\r\n"+engine.Diagnostics()+"\r\n\r\nHotkey: "+(hotkeyRegistered?"registered":"unavailable; use Bug click")+"\r\nMode: "+Program.LogMode+"\r\nLocal log: "+Program.LogPath+"\r\nLog write status: "+(Program.Telemetry.LastError.Length==0?"writing enabled":Program.Telemetry.LastError)+"; dropped records: "+Program.Telemetry.DroppedRecords;};
+            Action refreshText=delegate {info.Text="VOICEMEETER BUG  /  1.0\r\nBy Astra\r\n\r\nClick Bug: restart the audio engine.\r\nCtrl+Alt+F10: same action.\r\nDrag Bug or star to move. Click star to hide/show Bug.\r\nRight-click either, or use the tray icon, for controls.\r\n\r\nAutomatic repair watches selected output device reconnects.\r\n"+(engine.NativeA1AutoRestart?"Bug excludes A1, assuming Voicemeeter's native auto-restart is enabled. That setting is not verified here.":"The Bug is also watching A1.")+"\r\nNo microphone recording. Silence does not cause a reset.\r\nIf the cord glitches without a Windows device event, click Bug.\r\nA successful command does not confirm what you hear.\r\n\r\n"+engine.Diagnostics()+"\r\n\r\nHotkey: "+(hotkeyRegistered?"registered":"unavailable; use Bug click")+"\r\nMode: "+Program.LogMode+"\r\nLocal log: "+Program.LogPath+"\r\nLog write status: "+(Program.Telemetry.LastError.Length==0?"writing enabled":Program.Telemetry.LastError)+"; dropped records: "+Program.Telemetry.DroppedRecords;};
             refresh.Click+=delegate {refreshText();};refreshText();detailsWindow.Controls.Add(info);detailsWindow.Controls.Add(refresh);detailsWindow.Show();
         }
         static Icon MakeIcon() { return BugArt.MakeIcon(); }

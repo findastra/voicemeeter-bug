@@ -26,7 +26,7 @@ namespace VoicemeeterBug
         internal static int Run()
         {
             assertions = 0;
-            Mapping(); StateMachine(); NativeA1(); RateOnly(); Disconnect(); Circuit(); IndependentOutputs(); Reenumeration(); CallbackQueue();
+            Mapping(); StateMachine(); NativeA1(); AutomaticPolicyChanges(); NativeA1PolicyChanges(); RateOnly(); Disconnect(); Circuit(); IndependentOutputs(); Reenumeration(); CallbackQueue();
             HeartbeatTelemetry(); RawEventTelemetry(); ManualSnapshots(); SnapshotFailures();
             Console.WriteLine("PASS: " + assertions + " assertions; all restart requests used a fake API.");
             return 0;
@@ -68,8 +68,60 @@ namespace VoicemeeterBug
                 f.Step(1); f.Step(4); f.Device.Change("speaker", 4); f.Step(1); f.Device.Change("speaker", 1); f.Step(1); f.Step(3);
                 Assert(f.Voice.Restarts == 0, "native A1 avoids duplicate restart");
                 f.Engine.NativeA1AutoRestart = false;
+                f.Step(4);
                 f.Device.Change("speaker", 4); f.Step(1); f.Device.Change("speaker", 1); f.Step(1); f.Step(3);
                 Assert(f.Voice.Restarts == 1, "explicit A1 override works");
+            }
+        }
+        private static void AutomaticPolicyChanges()
+        {
+            using (Fixture f = new Fixture())
+            {
+                f.Step(1); f.Step(4);
+                f.Device.Change("headset", 4); f.Step(1); f.Device.Change("headset", 1); f.Step(1);
+                Assert(f.Engine.Diagnostics().Contains("pending outputs: 1"), "reconnected output pending before automatic disabled");
+                f.Engine.Automatic = false;
+                Assert(f.Engine.Diagnostics().Contains("pending outputs: 0"), "disabling automatic immediately clears pending repair");
+                f.Step(4); f.Step(40);
+                Assert(f.Voice.Restarts == 0, "disabled automatic cannot replay an already pending repair");
+                f.Device.Change("headset", 4); f.Step(1); f.Device.Change("headset", 1); f.Step(1); f.Step(3);
+                Assert(f.Engine.Diagnostics().Contains("pending outputs: 0"), "callbacks observed while disabled do not queue repair work");
+                // Also leave callbacks undrained across the setting change.
+                f.Device.Change("headset", 4); f.Device.Change("headset", 1);
+                f.Engine.Automatic = true;
+                f.Step(1); f.Step(4); f.Step(31);
+                Assert(f.Voice.Restarts == 0, "enabling automatic rebaselines without replaying old or queued callbacks");
+                f.Device.Change("headset", 4); f.Step(1); f.Device.Change("headset", 1); f.Step(1);
+                f.Engine.Automatic = true;
+                Assert(f.Engine.Diagnostics().Contains("pending outputs: 1"), "assigning unchanged automatic mode retains legitimate pending recovery");
+                f.Step(3);
+                Assert(f.Voice.Restarts == 1, "future reconnect still repairs after automatic mode reenabled");
+                f.Engine.Automatic = false; f.Engine.Automatic = true; f.Step(6);
+                Assert(!f.Engine.Repair("automatic guard survives mode toggles", true), "automatic mode changes preserve existing restart cooldown");
+            }
+        }
+        private static void NativeA1PolicyChanges()
+        {
+            using (Fixture f = new Fixture())
+            {
+                f.Step(1); f.Step(4);
+                f.Device.Change("speaker", 4); f.Device.Change("speaker", 1);
+                f.Engine.NativeA1AutoRestart = false;
+                f.Step(1); f.Step(4);
+                Assert(f.Voice.Restarts == 0, "taking ownership of A1 ignores previously queued callbacks");
+                f.Device.Change("speaker", 4); f.Step(1); f.Device.Change("speaker", 1); f.Step(1);
+                Assert(f.Engine.Diagnostics().Contains("pending outputs: 1"), "A1 recovery is pending before ownership released");
+                f.Engine.NativeA1AutoRestart = true;
+                Assert(f.Engine.Diagnostics().Contains("pending outputs: 0"), "releasing A1 ownership immediately clears pending repair");
+                f.Step(4);
+                Assert(f.Voice.Restarts == 0, "releasing A1 ownership cannot replay a pending A1 restart");
+                Assert(f.Engine.Details.Contains("A1 is excluded") && f.Engine.Details.Contains("not verified"), "A1 status describes exclusion without claiming verified native setting");
+                f.Engine.NativeA1AutoRestart = false; f.Step(4);
+                f.Device.Change("speaker", 4); f.Step(1); f.Device.Change("speaker", 1); f.Step(1);
+                f.Engine.NativeA1AutoRestart = false;
+                Assert(f.Engine.Diagnostics().Contains("pending outputs: 1"), "assigning unchanged A1 policy retains legitimate pending recovery");
+                f.Step(3);
+                Assert(f.Voice.Restarts == 1, "future A1 reconnect repairs after ownership rebaselines");
             }
         }
         private static void RateOnly()
