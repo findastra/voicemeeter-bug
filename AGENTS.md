@@ -42,3 +42,5 @@ New owner-facing files use lowercase words separated by hyphens and a Denver dat
 Reserved repository filenames used for this preparation are `README.md`, `pet.json`, `AGENTS.md`, `CLAUDE.md`, `.gitignore`, and the shared convention's `LICENSE`. These naming exceptions were surfaced before creation. Other naming exceptions must also be surfaced before a conflicting file is created.
 
 This repository was prepared locally. Do not describe it as published, create a remote repository, push, or change the GitHub topic without authorization for that action. Do not bundle Voicemeeter's separately installed proprietary binaries.
+
+Desktop artwork and size sync: OpenAI Codex (GPT-6), 2026-10-11. Read desktop-pet-20261011.json. No sparkles. Keep draft and approved design status explicit.

@@ -42,5 +42,6 @@
       "watchdog_update": "passed: stale recovery events cleared on automatic-mode/A1 ownership changes, fresh baseline required, existing cooldown history preserved; legacy --caged accepted as hosted alias",
       "login_test": "configured and startup command verified; actual logout/reboot not performed"
     }
-  }
+  },
+  "desktop_pet": "desktop-pet-20261011.json"
 }

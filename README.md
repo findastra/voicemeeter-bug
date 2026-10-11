@@ -99,3 +99,6 @@ The metadata follows [the pet file conventions](https://github.com/findastra/ast
 The existing local guide records the Bug artwork as generated with the built-in image-generation tool on 2026-10-08. The existing PNG mood frames, icon, and preview are retained. The original generation record is not included in this repository, so that attribution is documented provenance rather than a new independent rights audit. Voicemeeter and its Remote API remain separately installed third-party software; their binaries are not redistributed here.
 
 See [AGENTS.md](AGENTS.md) for maintenance rules and [CLAUDE.md](CLAUDE.md) for the assistant entry point.
+
+## Desktop pet update - 2026-10-11
+Hosted desktop pet reduced 20%; audio recovery behavior unchanged. Desktop artwork status: draft. Manifest: [desktop-pet-20261011.json](desktop-pet-20261011.json). The native companion renders this art; existing browser interface behavior is unchanged. Generated character artwork uses OpenAI image generation; source sheets and derived frames are included where applicable. Public credit: Astra. Integrated by OpenAI Codex (GPT-6).

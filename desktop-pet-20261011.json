@@ -1,0 +1,14 @@
+{
+  "desktop_scale": 0.8,
+  "alpha": "Desktop renderer thresholds partial alpha to prevent magenta color-key flecks",
+  "sparkles": false,
+  "renderer": "astras-pet-apps/scripts/desktop-pets-20261011.cs",
+  "status": "draft",
+  "date": "2026-10-11",
+  "art_files": [],
+  "creator": "Astra",
+  "scale_reference": "Standard 58.75 logical-pixel height, with aspect-ratio width clamp before scaling",
+  "assistant": "OpenAI Codex (GPT-6)",
+  "notes": "Hosted desktop pet reduced 20%; audio recovery behavior unchanged.",
+  "pet": "voicemeeter-bug"
+}
