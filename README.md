@@ -31,7 +31,7 @@ The build embeds the nine `bug-*-20261008.png` frames and the app icon. `voiceme
 
 ## Hosted mode
 
-[Astra's Pet Apps](https://github.com/findastra/astras-pet-apps) can supply the visible Bug and star while this app keeps the watcher and hotkey running:
+[Astra's PetOS](https://github.com/findastra/astras-pet-os) can supply the visible Bug and star while this app keeps the watcher and hotkey running:
 
 ```powershell
 .\voicemeeter-bug-20261008.exe --hosted
@@ -94,7 +94,7 @@ Local verification results are recorded in [pet.json](pet.json). A pending resul
 
 ## Pet-app conventions and provenance
 
-The metadata follows [the pet file conventions](https://github.com/findastra/astras-pet-apps/blob/main/PET-FILES.md). Changes to this pet's job, status, audit, or public description are submitted to the Friendly Farmer through `cage.submit` in `pet.json`; generated hub files are not edited here.
+The metadata follows [the pet file conventions](https://github.com/findastra/astras-pet-os/blob/main/PET-FILES.md). Changes to this pet's job, status, audit, or public description are submitted to the Friendly Farmer through `cage.submit` in `pet.json`; generated hub files are not edited here.
 
 The existing local guide records the Bug artwork as generated with the built-in image-generation tool on 2026-10-08. The existing PNG mood frames, icon, and preview are retained. The original generation record is not included in this repository, so that attribution is documented provenance rather than a new independent rights audit. Voicemeeter and its Remote API remain separately installed third-party software; their binaries are not redistributed here.
 

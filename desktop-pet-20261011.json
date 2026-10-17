@@ -6,7 +6,7 @@
   "status": "draft",
   "desktop_scale": 0.8,
   "sparkles": false,
-  "renderer": "astras-pet-apps/scripts/desktop-pets-20261011.cs",
+  "renderer": "astras-pet-os/scripts/desktop-pets-20261011.cs",
   "art_files": [
     "desktop-art/voicemeeter-bug/alarmed-20261011.png",
     "desktop-art/voicemeeter-bug/blink-20261011.png",
