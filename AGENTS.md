@@ -29,7 +29,7 @@ Do not commit incident notes, verification exports, startup backups, previous-ve
 
 ## Pet-app conventions
 
-This pet belongs to [Astra's Pet Apps](https://github.com/findastra/astras-pet-apps). Follow the shared [PET-FILES.md](https://github.com/findastra/astras-pet-apps/blob/main/PET-FILES.md) conventions. Submit changes to this pet's name, job, status, audit, and descriptions to the **Friendly Farmer** through dated `cage.submit` metadata. Do not edit generated hub files from this repository.
+This pet belongs to [Astra's PetOS](https://github.com/findastra/astras-pet-os). Follow the shared [PET-FILES.md](https://github.com/findastra/astras-pet-os/blob/main/PET-FILES.md) conventions. Submit changes to this pet's name, job, status, audit, and descriptions to the **Friendly Farmer** through dated `cage.submit` metadata. Do not edit generated hub files from this repository.
 
 `pet.json` is this pet's metadata. Its `sprite` and `entry` must identify real repository files. Use `growing` while behavior has known limitations; do not claim approval or completion based on packaging alone. The `audit.cadence` value describes the shared convention and does not itself install a local scheduled task.
 
